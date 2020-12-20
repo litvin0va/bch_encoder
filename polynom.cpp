@@ -52,13 +52,30 @@ void polynom::squeeze () ///delete leading zeros
 {
   while (1)
     {
-      if (!m_coefs.back () ())
+      if (m_coefs.size () && !m_coefs.back () ())
         m_coefs.pop_back ();
       else
         return;
     }
 }
 
+bool polynom::get_value (bool value) const
+{
+  if (!value)
+    {
+      if (size ())
+        return m_coefs.front ()();
+      return false;
+    }
+  polynom_coef res (false);
+  for (auto &coef : m_coefs)
+    {
+      if (!coef ())
+        continue;
+      res += polynom_coef (true);
+    }
+  return res ();
+}
 
 polynom polynom::operator + (const polynom &second) const
 {
@@ -115,7 +132,8 @@ void divide (const polynom &dividend, const polynom &divider, polynom &res, poly
 
   remainder = dividend;
 
-  while (remainder.size () > divider.size ())
+  int k = 0;
+  while (remainder.size () >= divider.size ())
     {
       int factor_degree = remainder.size () - divider.size ();
       polynom factor_polynom (1 << factor_degree);

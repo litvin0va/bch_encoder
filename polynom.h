@@ -76,6 +76,9 @@ public:
   void print_polynom () const;
   void squeeze ();
 
+  bool get_value (bool value) const;
+
+  
   polynom operator + (const polynom &second) const;
   polynom operator - (const polynom &second) const;
   polynom operator * (const polynom &pol) const;
