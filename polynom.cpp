@@ -59,6 +59,21 @@ void polynom::squeeze () ///delete leading zeros
     }
 }
 
+polynom polynom::insert_polynom (const polynom &value) const
+{
+  polynom res;
+  for (int i = 0; i < size (); i++)
+    {
+      if (!m_coefs[i] ())
+        continue;
+      polynom term (true);
+      for (int deg = 0; deg < i; deg++)
+        term *= *this;
+      res += term;
+    }
+  return res;
+}
+
 bool polynom::get_value (bool value) const
 {
   if (!value)

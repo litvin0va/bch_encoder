@@ -77,7 +77,7 @@ public:
   void squeeze ();
 
   bool get_value (bool value) const;
-
+  polynom insert_polynom (const polynom &value) const;
   
   polynom operator + (const polynom &second) const;
   polynom operator - (const polynom &second) const;

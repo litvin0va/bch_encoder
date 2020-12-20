@@ -34,7 +34,17 @@ int main ()
   //c.print ();
   c.print_polynom ();
 
-  polynom a1 (8 + 1);
+  printf ("\n Value: ");
+  printf ("%d", a.get_value(true));
+  printf (" %d", a.get_value(false));
+
+  printf ("\nInsert:\n");
+  c = b.insert_polynom (b);
+  //c.print ();
+  c.print_polynom ();
+
+
+  /*polynom a1 (8 + 1);
   polynom b1 (16 + 4 + 1);
   printf ("\na1 = ");
   a1.print_polynom ();
@@ -45,7 +55,7 @@ int main ()
 
   polynom prime (8 + 4 + 1);
   printf ("prime for factor by x3 + x2 + 1 :\n");
-  find_prime (prime).print_polynom ();
+  find_prime (prime).print_polynom ();*/
 
   return 0;
 }
