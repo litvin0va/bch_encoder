@@ -34,10 +34,22 @@ polynom find_prime (const polynom &factor)
 
 void gener_prime_polynoms (int max_size)
 {
-	std::vector<std::unique_ptr<polynom>> primes;
-	for (int i = 1; i <= max_size; i++)
+	FILE *f = fopen ("primes.txt", "w");
+	for (int i = 2; i <= (1 << max_size); i++)
 		{
 			polynom curr (i);
+			if (!curr.get_value (0) || !curr.get_value (1))
+				continue;
+
+			int j;
+			for (j = 2; j < i; j++)
+				{
+					if (!((curr % polynom (j)).size ()))
+						break;
+				}
+			if (j >= i)
+				fprintf (f, "%d %d\n", curr.size (), i);
 		}
+	fclose (f);
 }
 
