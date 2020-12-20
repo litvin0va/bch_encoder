@@ -35,6 +35,27 @@ struct polynom_coef
   {
     return m_coef;
   }
+
+  bool operator == (const polynom_coef &c) const
+  {
+    return m_coef == c.m_coef;
+  }
+
+  bool operator != (const polynom_coef &c) const
+  {
+    return m_coef != c.m_coef;
+  }
+
+  bool operator > (const polynom_coef &c) const
+  {
+    return m_coef && !c.m_coef;
+  }
+
+  bool operator < (const polynom_coef &c) const
+  {
+    return !m_coef && c.m_coef;
+  }
+
 };
 
 
@@ -53,8 +74,23 @@ public:
 
   void print () const;
   void print_polynom () const;
+  void squeeze ();
 
   polynom operator + (const polynom &second) const;
+  polynom operator - (const polynom &second) const;
   polynom operator * (const polynom &pol) const;
+  polynom operator / (const polynom &divider) const;
+  polynom operator % (const polynom &divider) const;
+  bool operator > (const polynom &second) const;
+  bool operator < (const polynom &second) const;
+  bool operator == (const polynom &second) const;
 
+  void operator += (const polynom &second);
+  void operator -= (const polynom &second);
+  void operator *= (const polynom &pol);
+  void operator /= (const polynom &pol);
+  void operator %= (const polynom &pol);
 };
+
+
+void divide (const polynom &dividend, const polynom &divider, polynom &res, polynom &remainder);

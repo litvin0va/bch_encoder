@@ -48,6 +48,17 @@ void polynom::print_polynom () const
   printf ("\n");
 }
 
+void polynom::squeeze () ///delete leading zeros
+{
+  while (1)
+    {
+      if (!m_coefs.back () ())
+        m_coefs.pop_back ();
+      else
+        return;
+    }
+}
+
 
 polynom polynom::operator + (const polynom &second) const
 {
@@ -61,9 +72,14 @@ polynom polynom::operator + (const polynom &second) const
   for (int i = 0; i < little.size (); ++i)
     res.m_coefs[i] += little.m_coefs[i];
 
+  res.squeeze ();
   return res;
 }
 
+polynom polynom::operator - (const polynom &second) const
+{
+  return *this + second;
+}
 
 polynom polynom::operator * (const polynom &pol) const
 {
@@ -80,22 +96,106 @@ polynom polynom::operator * (const polynom &pol) const
     for (int i2 = 0; i2 < second_size; i2++)
       coefficients[i1 + i2] += first[i1] * second[i2];
 
+  res.squeeze ();
   return res;
 }
 
 
+void divide (const polynom &dividend, const polynom &divider, polynom &res, polynom &remainder)
+{
+  int first_size = dividend.size ();
+  int second_size = divider.size ();
+
+  if (dividend.size () < divider.size ())
+    {
+      res = polynom (0);
+      remainder = dividend;
+      return;
+    }
+
+  remainder = dividend;
+
+  while (remainder.size () > divider.size ())
+    {
+      int factor_degree = remainder.size () - divider.size ();
+      polynom factor_polynom (1 << factor_degree);
+      res += factor_polynom;
+      remainder -= divider * factor_polynom;
+    }
+}
+
+polynom polynom::operator / (const polynom &divider) const
+{
+  polynom res, remainder;
+  divide (*this, divider, res, remainder);
+  return res;
+}
 
 
+polynom polynom::operator % (const polynom &divider) const
+{
+  polynom res, remainder;
+  divide (*this, divider, res, remainder);
+  return remainder;
+}
 
 
+bool polynom::operator > (const polynom &second) const
+{
+  if (this->size () != second.size ())
+    return this->size () > second.size ();
 
+  for (int i = 0; i < second.size (); i++)
+    if (m_coefs[i] > second.m_coefs[i])
+      return true;
+  return false;
+}
 
+bool polynom::operator < (const polynom &second) const
+{
+  if (this->size () != second.size ())
+    return this->size () < second.size ();
 
+  for (int i = 0; i < second.size (); i++)
+    if (m_coefs[i] < second.m_coefs[i])
+      return true;
+  return false;
+}
 
+bool polynom::operator == (const polynom &second) const
+{
+  if (this->size () != second.size ())
+    return false;
 
+  for (int i = 0; i < second.size (); i++)
+    if (m_coefs[i] != second.m_coefs[i])
+      return false;
+  return true;
+}
 
+void polynom::operator += (const polynom &second)
+{
+  *this = *this + second;
+}
 
+void polynom::operator -= (const polynom &second)
+{
+  *this = *this - second;
+}
 
+void polynom::operator *= (const polynom &pol)
+{
+  *this = *this * pol;
+}
 
+void polynom::operator /= (const polynom &second)
+{
+  *this = *this / second;
+}
+
+void polynom::operator %= (const polynom &pol)
+{
+  *this = *this % pol;
+}
 
 
