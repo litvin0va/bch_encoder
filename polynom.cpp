@@ -68,7 +68,7 @@ polynom polynom::insert_polynom (const polynom &value) const
         continue;
       polynom term (true);
       for (int deg = 0; deg < i; deg++)
-        term *= *this;
+        term *= value;
       res += term;
     }
   return res;
@@ -147,7 +147,6 @@ void divide (const polynom &dividend, const polynom &divider, polynom &res, poly
 
   remainder = dividend;
 
-  int k = 0;
   while (remainder.size () >= divider.size ())
     {
       int factor_degree = remainder.size () - divider.size ();

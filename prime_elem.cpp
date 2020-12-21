@@ -2,6 +2,61 @@
 #include "polynom.h"
 #include "prime_elem.h"
 #include <vector>
+#define MAX_POLYNOM 1e15
+
+polynom get_nullifying_polynom (const polynom &p, const polynom &mod) ///find f : f(p)=0 (mod)
+{
+  int pol = 2;
+  while (pol < MAX_POLYNOM)
+    {
+      polynom f (pol);
+      polynom ins = f.insert_polynom (p);
+      polynom remainder = ins % mod;
+      if (!remainder.size ())
+        return f;
+      pol++;
+    }
+  printf ("Nullifying Polynom not Found!!!!\n");
+  return polynom ();
+}
+
+bool find (const std::vector<polynom> &pol_vector, const polynom &pol_to_find)
+{
+  for (const auto &pol : pol_vector)
+    {
+      if (pol == pol_to_find)
+        return true;
+    }
+  return false;
+}
+
+polynom get_product (const std::vector<polynom> &pol_vector)
+{
+  polynom ans (1);
+  for (const auto &pol : pol_vector)
+    {
+      //pol.print ();
+      ans *= pol;
+    }
+  return ans;
+}
+
+polynom get_nullifying_product (const std::vector<polynom> &vec, const polynom &mod)
+{
+  std::vector<polynom> polynoms_to_product;
+
+  for (const auto &pol : vec)
+    {
+      auto nullinying = get_nullifying_polynom (pol, mod);
+      if (find (polynoms_to_product, nullinying))
+        continue;
+      polynoms_to_product.push_back (nullinying);
+    }
+ // printf ("SIZE: %d\n", polynoms_to_product.size ());
+  if (!polynoms_to_product.size ())
+    printf ("Nullifying Polynoms Vector is Empty!!!!\n");
+  return get_product (polynoms_to_product);
+}
 
 
 polynom find_prime (const polynom &factor)
@@ -52,4 +107,5 @@ void gener_prime_polynoms (int max_size)
 		}
 	fclose (f);
 }
+
 
