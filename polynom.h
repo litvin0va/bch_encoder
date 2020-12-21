@@ -68,6 +68,7 @@ public:
   polynom () {}
   polynom (int n);
   polynom (std::vector<polynom_coef> &pol);
+  polynom (std::vector<bool> &pol);
   ~polynom ();
 
   int size () const { return m_coefs.size (); }

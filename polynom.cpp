@@ -16,6 +16,12 @@ polynom::polynom (std::vector<polynom_coef> &pol)
   m_coefs = pol;
 }
 
+polynom::polynom (std::vector<bool> &pol)
+{
+  for (bool p : pol)
+    m_coefs.push_back (polynom_coef (p));
+}
+
 polynom::~polynom ()
 {
 }
@@ -62,14 +68,13 @@ void polynom::squeeze () ///delete leading zeros
 polynom polynom::insert_polynom (const polynom &value) const
 {
   polynom res;
+  polynom term (true);
   for (int i = 0; i < size (); i++)
     {
       if (!m_coefs[i] ())
         continue;
-      polynom term (true);
-      for (int deg = 0; deg < i; deg++)
-        term *= value;
       res += term;
+      term *= value;
     }
   return res;
 }
