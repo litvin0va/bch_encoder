@@ -163,6 +163,14 @@ polynom polynom::operator / (const polynom &divider) const
   return res;
 }
 
+bool polynom::is_all_units () const
+{
+  for (const auto &coef : m_coefs)
+    if (!coef ())
+      return false;
+  return true;
+}
+
 
 polynom polynom::operator % (const polynom &divider) const
 {

@@ -75,6 +75,7 @@ public:
   void print () const;
   void print_polynom () const;
   void squeeze ();
+  bool is_all_units () const;
 
   bool get_value (bool value) const;
   polynom insert_polynom (const polynom &value) const;

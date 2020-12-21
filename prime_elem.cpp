@@ -4,6 +4,19 @@
 #include <vector>
 #define MAX_POLYNOM 1e15
 
+
+std::vector<polynom> create_power_vector (const polynom &pol, int max_deg, const polynom &mod)
+{
+  std::vector<polynom> vec;
+  polynom tmp (1);
+  for (int i = 1; i <= max_deg; i++)
+    {
+      tmp *= pol;
+      vec.push_back (tmp % mod);
+    }
+  return vec;
+}
+
 polynom get_nullifying_polynom (const polynom &p, const polynom &mod) ///find f : f(p)=0 (mod)
 {
   int pol = 2;
@@ -52,7 +65,7 @@ polynom get_nullifying_product (const std::vector<polynom> &vec, const polynom &
         continue;
       polynoms_to_product.push_back (nullinying);
     }
- // printf ("SIZE: %d\n", polynoms_to_product.size ());
+  printf ("SIZE: %d\n", polynoms_to_product.size ());
   if (!polynoms_to_product.size ())
     printf ("Nullifying Polynoms Vector is Empty!!!!\n");
   return get_product (polynoms_to_product);
