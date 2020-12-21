@@ -2,39 +2,23 @@
 #include "polynom.h"
 #include "prime_elem.h"
 
-int get_m_by_n (int n)
-{
-  return (polynom (n) + polynom (1)).size ();
-}
-
-bool check_n (int n)
-{
-  polynom pol (n);
-  return pol.is_all_units ();
-}
-
 int main ()
 {
-  int n, t;
-  printf ("Input n : ");
-  scanf ("%d", &n);
+  int n, t, m;
+  printf ("Input m : ");
+  scanf ("%d", &m);
 
-  printf ("Input t : ");
-  scanf ("%d", &t);
-
-  if (!check_n (n))
-    {
-      printf ("Error: N need to be as 2^m-1 \n");
-      return -1;
-    }
-
-  int m = get_m_by_n (n);
-  printf ("m : %d \n", m);
   if (m > 15)
     {
       printf ("Error: Bad Input!\n");
       return 0;
     }
+
+  n = (1 << m) - 1;
+  printf ("n : %d \n", n);
+
+  printf ("Input t : ");
+  scanf ("%d", &t);
 
   FILE *fp;
   if (!(fp = fopen ("primes.txt", "r")))
@@ -70,7 +54,7 @@ int main ()
   int k = word.size ();
   polynom mult (1<<(n-k));
   word *= mult;
-  word %= g;
+  word += word % g;
   word.print();
   return 0;
 }
