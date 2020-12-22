@@ -73,7 +73,7 @@ public:
   ~polynom ();
 
   int size () const { return m_coefs.size (); }
-
+  void add_zeros_to (int n);
   void print () const;
   void print_polynom () const;
   void squeeze ();

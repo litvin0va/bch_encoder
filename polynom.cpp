@@ -160,6 +160,12 @@ polynom polynom::operator * (const polynom &pol) const
   return res;
 }
 
+void polynom::add_zeros_to (int n)
+{
+  while (m_coefs.size () < n)
+    m_coefs.push_back (polynom_coef (false));
+}
+
 
 void divide (const polynom &dividend, const polynom &divider, polynom &res, polynom &remainder)
 {
