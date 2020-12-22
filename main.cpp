@@ -8,6 +8,7 @@
 int get_input_parameters (int &n, int &t, int &m);
 int get_factor_polynom (int m);
 std::vector<bool> get_input ();
+void check (const polynom &g, int n);
 
 int main ()
 {
@@ -24,6 +25,7 @@ int main ()
   auto powers_of_prime = create_power_vector (prime, 2 * t, factor_polynom);
   polynom g = get_nullifying_product (powers_of_prime, factor_polynom);
 
+  //check (g, (1 << m) - 1);
   g.print_polynom ();
 
   auto input_vector = get_input ();
@@ -94,4 +96,16 @@ int get_input_parameters (int &n, int &t, int &m)
   printf ("Input t : ");
   scanf ("%d", &t);
   return 0;
+}
+
+void check (const polynom &g, int n)
+{
+  printf ("p1\n");
+  polynom pol ((1 << n) + 1);
+  printf ("1\n");
+  if (!(pol % g).size ())
+    printf ("POLYNOM g IS CORRECT\n");
+  else
+    printf ("POLYNOM g IS NOT CORRECT\n");
+  printf ("2\n");
 }
