@@ -35,6 +35,28 @@ void polynom::print () const
   printf (">\n");
 }
 
+int polynom::get_polynom () const
+{
+  int ans = 0;
+  for (int i = 0; i < size (); i++)
+    {
+      if (m_coefs[i] ())
+        ans += 1<<i;
+    }
+  return ans;
+}
+
+void polynom::get_string_polynom (std::string &ans) const
+{
+  for (int i = 0; i < size (); i++)
+    {
+      if (m_coefs[i] ())
+        ans += "1";
+      else
+        ans += "0";
+    }
+}
+
 void polynom::print_polynom () const
 {
   bool is_first = true;
@@ -65,20 +87,17 @@ void polynom::squeeze () ///delete leading zeros
     }
 }
 
-polynom polynom::insert_polynom (const polynom &value) const
+polynom polynom::insert_polynom (const polynom &value, const polynom &mod) const
 {
   polynom res;
   polynom term (true);
   for (int i = 0; i < size (); i++)
     {
-      if (!m_coefs[i] ())
-        {
-          term *= value;
-          continue;
-        }
-
-      res += term;
       term *= value;
+      term %= mod;
+      if (!m_coefs[i] ())
+        continue;
+      res += term;
     }
   return res;
 }

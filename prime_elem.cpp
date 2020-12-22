@@ -12,7 +12,8 @@ std::vector<polynom> create_power_vector (const polynom &pol, int max_deg, const
   for (int i = 1; i <= max_deg; i++)
     {
       tmp *= pol;
-      vec.push_back (tmp % mod);
+      tmp %= mod;
+      vec.push_back (tmp);
     }
   return vec;
 }
@@ -23,7 +24,7 @@ polynom get_nullifying_polynom (const polynom &p, const polynom &mod) ///find f 
   while (pol < MAX_POLYNOM)
     {
       polynom f (pol);
-      polynom ins = f.insert_polynom (p);
+      polynom ins = f.insert_polynom (p, mod);
       polynom remainder = ins % mod;
       if (!remainder.size ())
         return f;

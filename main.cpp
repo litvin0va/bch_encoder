@@ -4,40 +4,49 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fstream>
+#include <string>
 
 int get_input_parameters (int &n, int &m);
 int get_factor_polynom (int m);
 std::vector<bool> get_input (int max_len);
-void check (const polynom &g, int n);
+bool check (const polynom &g, int n);
 
 int main ()
 {
-  int n, t, m;
-  if (get_input_parameters (n, m))
-    return -1;
-  printf ("Input t less then %d: ", 1<<m);
-  scanf ("%d", &t);
+  std::ofstream out;
+  out.open("generating.txt");
 
-  int factor_pol = get_factor_polynom (m);
-  if (factor_pol < 1)
-    return -1;
+  for (int m = 2; m < 15; m++)
+    {
+      int n = (1 << m) - 1;
+      int factor_pol = get_factor_polynom (m);
+      if (factor_pol < 1)
+        return -1;
 
-  polynom factor_polynom (factor_pol);
-  polynom prime = find_prime (factor_polynom);
-  auto powers_of_prime = create_power_vector (prime, 2 * t, factor_polynom);
-  polynom g = get_nullifying_product (powers_of_prime, factor_polynom);
+      polynom factor_polynom (factor_pol);
+      polynom prime = find_prime (factor_polynom);
 
-  check (g, (1 << m) - 1);
-  g.print_polynom ();
-
-  auto input_vector = get_input (n - g.size());
-  polynom word (input_vector);
-  int k = word.size ();
-  word.squeeze ();
-  polynom mult (1<<(n-k));
-  word *= mult;
-  word += word % g;
-  word.print();
+      for (int t = 1; t < (1 << (m - 2)); t++)
+        {
+          auto powers_of_prime = create_power_vector (prime, 2 * t, factor_polynom);
+          polynom g = get_nullifying_product (powers_of_prime, factor_polynom);
+          if (n == g.size())
+            {
+              printf ("Skip t > %d\n", t);
+              break;
+            }
+          /*if (!check (g, (1 << m) - 1))
+            {
+              printf ("BAD!!!!!\n");
+              return -1;
+            }*/
+          std::string ans = "";
+          g.get_string_polynom (ans);
+          out << m << " " << t << " " << ans << "\n";
+          printf ("%d %d\n", m, t);
+        }
+    }
   return 0;
 }
 
@@ -78,7 +87,7 @@ int get_factor_polynom (int m)
     }
   if (pol <= 1)
     {
-      printf ("CANT TAKE FACTOR POLYNOM FROM FILE\n");
+      printf ("CANT TAKE FACTOR POLYNOM %d FROM FILE\n", m);
       fclose (fp);
       return -2;
     }
@@ -102,12 +111,18 @@ int get_input_parameters (int &n, int &m)
   return 0;
 }
 
-void check (const polynom &g, int n)
+bool check (const polynom &g, int n)
 {
-  printf ("p1\n");
+
   polynom pol ((1 << n) + 1);
   if (!(pol % g).size ())
-    printf ("POLYNOM g IS CORRECT\n");
+    {
+      //printf ("POLYNOM g IS CORRECT\n");
+      return true;
+    }
   else
-    printf ("POLYNOM g IS NOT CORRECT\n");
+    {
+      //printf ("POLYNOM g IS NOT CORRECT\n");
+      return false;
+    }
 }

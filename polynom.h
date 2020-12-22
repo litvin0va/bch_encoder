@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <string>
 
 
 struct polynom_coef
@@ -77,9 +78,11 @@ public:
   void print_polynom () const;
   void squeeze ();
   bool is_all_units () const;
+  int get_polynom () const;
+  void get_string_polynom (std::string &ans) const;
 
   bool get_value (bool value) const;
-  polynom insert_polynom (const polynom &value) const;
+  polynom insert_polynom (const polynom &value, const polynom &mod) const;
   
   polynom operator + (const polynom &second) const;
   polynom operator - (const polynom &second) const;
