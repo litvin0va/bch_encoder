@@ -4,6 +4,47 @@
 #include <vector>
 #define MAX_POLYNOM 1e15
 
+int get_factor_polynom (int m)
+{
+  FILE *fp;
+  if (!(fp = fopen ("primes.txt", "r")))
+    {
+      printf ("File \n");
+      return -1;
+    }
+  int deg, pol;
+  while (fscanf (fp, "%d %d", &deg, &pol) == 2)
+    {
+      if (deg == m)
+        break;
+      pol = -1;
+    }
+  if (pol <= 1)
+    {
+      printf ("CANT TAKE FACTOR POLYNOM %d FROM FILE\n", m);
+      fclose (fp);
+      return -2;
+    }
+  fclose (fp);
+  return pol;
+}
+
+void encode_word (std::vector<bool> &input_vector, const polynom &g, int n)
+{
+  polynom word (input_vector);
+  int k = word.size();
+  word.squeeze ();
+
+  std::vector<bool> pol_vec;
+  for (int i = 0; i < n - k; i++)
+    pol_vec.push_back (false);
+  pol_vec.push_back (true);
+
+  polynom mult (pol_vec/*1<<(n-k)*/);
+  word *= mult;
+  word += word % g;
+  word.print();
+}
 
 std::vector<polynom> create_power_vector (const polynom &pol, int max_deg, const polynom &mod)
 {
@@ -58,7 +99,6 @@ polynom get_product (const std::vector<polynom> &pol_vector)
 polynom get_nullifying_product (const std::vector<polynom> &vec, const polynom &mod)
 {
   std::vector<polynom> polynoms_to_product;
-
   for (const auto &pol : vec)
     {
       auto nullinying = get_nullifying_polynom (pol, mod);
@@ -66,7 +106,6 @@ polynom get_nullifying_product (const std::vector<polynom> &vec, const polynom &
         continue;
       polynoms_to_product.push_back (nullinying);
     }
-  //printf ("SIZE: %d\n", polynoms_to_product.size ());
   if (!polynoms_to_product.size ())
     printf ("Nullifying Polynoms Vector is Empty!!!!\n");
   return get_product (polynoms_to_product);

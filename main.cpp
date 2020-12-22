@@ -8,44 +8,35 @@
 #include <string>
 
 int get_input_parameters (int &n, int &m);
-int get_factor_polynom (int m);
 std::vector<bool> get_input (int max_len);
 bool check (const polynom &g, int n);
 
 int main ()
 {
-  for (int m = 2; m < 9; m++)
-    {
-      int n = (1 << m) - 1;
-      int factor_pol = get_factor_polynom (m);
-      if (factor_pol < 1)
-        return -1;
+  int n, t, m;
+  if (get_input_parameters (n, m))
+    return -1;
+  printf ("Input t less then %d: ", 1<< (m - 2));
+  scanf ("%d", &t);
 
-      polynom factor_polynom (factor_pol);
-      polynom prime = find_prime (factor_polynom);
+  int factor_pol = get_factor_polynom (m);
+  if (factor_pol < 1)
+    return -1;
 
-      for (int t = 1; t < (1 << (m - 2)); t++)
-        {
-          auto powers_of_prime = create_power_vector (prime, 2 * t, factor_polynom);
-          polynom g = get_nullifying_product (powers_of_prime, factor_polynom);
-          if (n == g.size())
-            {
-              printf ("Skip t > %d\n", t);
-              break;
-            }
-          if (!check (g, (1 << m) - 1))
-            {
-              printf ("BAD!!!!!\n");
-              return -1;
-            }
-          std::string ans = "";
-          g.get_string_polynom (ans);
-          //out << m << " " << t << " " << ans << "\n";
-          printf ("%d %d\n", m, t);
-        }
-    }
+  polynom factor_polynom (factor_pol);
+  polynom prime = find_prime (factor_polynom);
+  auto powers_of_prime = create_power_vector (prime, 2 * t, factor_polynom);
+  polynom g = get_nullifying_product (powers_of_prime, factor_polynom);
+
+  check (g, (1 << m) - 1);
+  g.print_polynom ();
+
+  auto input_vector = get_input (n - g.size());
+  encode_word (input_vector, g, n);
   return 0;
 }
+
+
 
 std::vector<bool> get_input (int max_size)
 {
@@ -67,37 +58,14 @@ std::vector<bool> get_input (int max_size)
   return input_vector;
 }
 
-int get_factor_polynom (int m)
-{
-  FILE *fp;
-  if (!(fp = fopen ("primes.txt", "r")))
-    {
-      printf ("File \n");
-      return -1;
-    }
-  int deg, pol;
-  while (fscanf (fp, "%d %d", &deg, &pol) == 2)
-    {
-      if (deg == m)
-        break;
-      pol = -1;
-    }
-  if (pol <= 1)
-    {
-      printf ("CANT TAKE FACTOR POLYNOM %d FROM FILE\n", m);
-      fclose (fp);
-      return -2;
-    }
-  fclose (fp);
-  return pol;
-}
+
 
 int get_input_parameters (int &n, int &m)
 {
-  printf ("Input m less then 5: ");
+  printf ("Input m less then 16: ");
   scanf ("%d", &m);
 
-  if (m > 15)
+  if (m >= 15)
     {
       printf ("Error: Bad Input!\n");
       return -1;
