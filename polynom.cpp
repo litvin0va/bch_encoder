@@ -178,7 +178,13 @@ void divide (const polynom &dividend, const polynom &divider, polynom &res, poly
   while (remainder.size () >= divider.size ())
     {
       int factor_degree = remainder.size () - divider.size ();
-      polynom factor_polynom (1 << factor_degree);
+
+      std::vector<bool> pol_vec;
+      for (int i = 0; i < factor_degree; i++)
+        pol_vec.push_back (false);
+      pol_vec.push_back (true);
+
+      polynom factor_polynom (pol_vec);
       res += factor_polynom;
       remainder -= divider * factor_polynom;
     }
