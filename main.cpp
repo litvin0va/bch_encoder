@@ -5,16 +5,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int get_input_parameters (int &n, int &t, int &m);
+int get_input_parameters (int &n, int &m);
 int get_factor_polynom (int m);
-std::vector<bool> get_input ();
+std::vector<bool> get_input (int max_len);
 void check (const polynom &g, int n);
 
 int main ()
 {
   int n, t, m;
-  if (get_input_parameters (n, t, m))
+  if (get_input_parameters (n, m))
     return -1;
+  printf ("Input t less then %d: ", 1<<m);
+  scanf ("%d", &t);
 
   int factor_pol = get_factor_polynom (m);
   if (factor_pol < 1)
@@ -25,10 +27,10 @@ int main ()
   auto powers_of_prime = create_power_vector (prime, 2 * t, factor_polynom);
   polynom g = get_nullifying_product (powers_of_prime, factor_polynom);
 
-  //check (g, (1 << m) - 1);
+  check (g, (1 << m) - 1);
   g.print_polynom ();
 
-  auto input_vector = get_input ();
+  auto input_vector = get_input (n - g.size());
   polynom word (input_vector);
   int k = word.size ();
   word.squeeze ();
@@ -39,15 +41,20 @@ int main ()
   return 0;
 }
 
-std::vector<bool> get_input ()
+std::vector<bool> get_input (int max_size)
 {
-  printf ("Input word : ");
+  printf ("Input word (max len = %d): ", max_size);
   char input[100];
   scanf ("%s", input);
 
   std::vector<bool> input_vector;
   for (int i = 0 ; i < strlen (input); i++)
     {
+      if (!(input[i] == '0' || input[i] == '1' && i < max_size))
+        {
+          printf ("Incorrect input word!\n");
+          return {};
+        }
       bool f = (input[i] == '0' ? false : true);
       input_vector.push_back (f);
     }
@@ -79,9 +86,9 @@ int get_factor_polynom (int m)
   return pol;
 }
 
-int get_input_parameters (int &n, int &t, int &m)
+int get_input_parameters (int &n, int &m)
 {
-  printf ("Input m : ");
+  printf ("Input m less then 5: ");
   scanf ("%d", &m);
 
   if (m > 15)
@@ -92,9 +99,6 @@ int get_input_parameters (int &n, int &t, int &m)
 
   n = (1 << m) - 1;
   printf ("n : %d \n", n);
-
-  printf ("Input t : ");
-  scanf ("%d", &t);
   return 0;
 }
 
@@ -102,10 +106,8 @@ void check (const polynom &g, int n)
 {
   printf ("p1\n");
   polynom pol ((1 << n) + 1);
-  printf ("1\n");
   if (!(pol % g).size ())
     printf ("POLYNOM g IS CORRECT\n");
   else
     printf ("POLYNOM g IS NOT CORRECT\n");
-  printf ("2\n");
 }

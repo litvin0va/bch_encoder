@@ -65,7 +65,7 @@ polynom get_nullifying_product (const std::vector<polynom> &vec, const polynom &
         continue;
       polynoms_to_product.push_back (nullinying);
     }
-  printf ("SIZE: %d\n", polynoms_to_product.size ());
+  //printf ("SIZE: %d\n", polynoms_to_product.size ());
   if (!polynoms_to_product.size ())
     printf ("Nullifying Polynoms Vector is Empty!!!!\n");
   return get_product (polynoms_to_product);
