@@ -72,7 +72,11 @@ polynom polynom::insert_polynom (const polynom &value) const
   for (int i = 0; i < size (); i++)
     {
       if (!m_coefs[i] ())
-        continue;
+        {
+          term *= value;
+          continue;
+        }
+
       res += term;
       term *= value;
     }
