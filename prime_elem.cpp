@@ -116,7 +116,7 @@ void gener_prime_polynoms (int max_size)
 						break;
 				}
 			if (j >= i)
-				fprintf (f, "%d %d\n", curr.size (), i);
+				fprintf (f, "%d %d\n", curr.size () - 1, i);
 		}
 	fclose (f);
 }
