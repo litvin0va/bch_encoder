@@ -14,10 +14,7 @@ bool check (const polynom &g, int n);
 
 int main ()
 {
-  std::ofstream out;
-  out.open("generating.txt");
-
-  for (int m = 2; m < 15; m++)
+  for (int m = 2; m < 9; m++)
     {
       int n = (1 << m) - 1;
       int factor_pol = get_factor_polynom (m);
@@ -36,14 +33,14 @@ int main ()
               printf ("Skip t > %d\n", t);
               break;
             }
-          /*if (!check (g, (1 << m) - 1))
+          if (!check (g, (1 << m) - 1))
             {
               printf ("BAD!!!!!\n");
               return -1;
-            }*/
+            }
           std::string ans = "";
           g.get_string_polynom (ans);
-          out << m << " " << t << " " << ans << "\n";
+          //out << m << " " << t << " " << ans << "\n";
           printf ("%d %d\n", m, t);
         }
     }
@@ -113,8 +110,12 @@ int get_input_parameters (int &n, int &m)
 
 bool check (const polynom &g, int n)
 {
-
-  polynom pol ((1 << n) + 1);
+  std::vector<bool> pol_vec;
+  pol_vec.push_back (true);
+  for (int i = 1; i < n; i++)
+    pol_vec.push_back (false);
+  pol_vec.push_back (true);
+  polynom pol (pol_vec);
   if (!(pol % g).size ())
     {
       //printf ("POLYNOM g IS CORRECT\n");
