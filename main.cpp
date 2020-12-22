@@ -31,7 +31,7 @@ int main ()
   check (g, (1 << m) - 1);
   g.print_polynom ();
 
-  auto input_vector = get_input (n - g.size());
+  auto input_vector = get_input (n - g.size() + 1);
   encode_word (input_vector, g, n);
   return 0;
 }

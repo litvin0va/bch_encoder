@@ -43,8 +43,8 @@ void encode_word (std::vector<bool> &input_vector, const polynom &g, int n)
   polynom mult (pol_vec/*1<<(n-k)*/);
   word *= mult;
   word += word % g;
-  word.print();
   word.add_zeros_to (n);
+  word.print();
 }
 
 std::vector<polynom> create_power_vector (const polynom &pol, int max_deg, const polynom &mod)

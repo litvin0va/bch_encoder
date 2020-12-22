@@ -29,9 +29,9 @@ polynom::~polynom ()
 
 void polynom::print () const
 {
-  printf ("< ");
+  printf ("<");
   for (auto val : m_coefs)
-    printf ("%d ", val);
+    printf ("%d", val);
   printf (">\n");
 }
 
@@ -163,7 +163,9 @@ polynom polynom::operator * (const polynom &pol) const
 void polynom::add_zeros_to (int n)
 {
   while (m_coefs.size () < n)
-    m_coefs.push_back (polynom_coef (false));
+    {
+      m_coefs.push_back (polynom_coef (false));
+    }
 }
 
 
